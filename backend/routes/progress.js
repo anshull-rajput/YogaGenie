@@ -6,12 +6,33 @@ import Session from '../models/Session.js';
 const r = express.Router();
 r.use(auth);
 
+const startOfWeek = (date = new Date()) => {
+  const d = new Date(date);
+  d.setHours(0, 0, 0, 0);
+  d.setDate(d.getDate() - ((d.getDay() + 6) % 7));
+  return d;
+};
+
+const currentWeekMinutes = async userId => {
+  const start = startOfWeek();
+  const sessions = await Session.find({ userId, completed: true, completedAt: { $gte: start } });
+  const weekly = [0, 0, 0, 0, 0, 0, 0];
+  sessions.forEach(session => {
+    const d = new Date(session.completedAt);
+    weekly[(d.getDay() + 6) % 7] += Number(session.duration) || 0;
+  });
+  return weekly;
+};
+
 r.get('/', async (req, res) => {
   try {
     let p = await Progress.findOne({ userId: req.user._id });
     if (!p) p = await Progress.create({ userId: req.user._id });
-    const sessions = await Session.find({ userId: req.user._id, completed: true }).sort({ completedAt: -1 });
-    res.json({ progress: p, sessions });
+    const [sessions, weeklyProgress] = await Promise.all([
+      Session.find({ userId: req.user._id, completed: true }).sort({ completedAt: -1 }),
+      currentWeekMinutes(req.user._id)
+    ]);
+    res.json({ progress: { ...p.toObject(), weeklyProgress }, sessions });
   } catch {
     res.status(500).json({ message: 'Unable to load progress.' });
   }
@@ -31,17 +52,22 @@ r.get('/monthly', async (req, res) => {
     const now = new Date();
     const year = Number(req.query.year) || now.getFullYear();
     const month = Number(req.query.month) || now.getMonth() + 1;
-    if (month < 1 || month > 12 || year < 2000 || year > 2100) return res.status(400).json({ message: 'Invalid month or year.' });
+    if (month < 1 || month > 12 || year < 2000 || year > 2100) {
+      return res.status(400).json({ message: 'Invalid month or year.' });
+    }
     const start = new Date(year, month - 1, 1);
     const end = new Date(year, month, 1);
-    const sessions = await Session.find({ userId: req.user._id, completed: true, completedAt: { $gte: start, $lt: end } }).sort({ completedAt: 1 });
+    const sessions = await Session.find({
+      userId: req.user._id,
+      completed: true,
+      completedAt: { $gte: start, $lt: end }
+    }).sort({ completedAt: 1 });
     const days = new Date(year, month, 0).getDate();
-    const minutes = Array(days).fill(0);
+    const dailyMinutes = Array(days).fill(0);
     sessions.forEach(s => {
-      const day = new Date(s.completedAt).getDate();
-      minutes[day - 1] += Number(s.duration) || 0;
+      dailyMinutes[new Date(s.completedAt).getDate() - 1] += Number(s.duration) || 0;
     });
-    res.json({ year, month, sessions: sessions.length, totalMinutes: minutes.reduce((a, b) => a + b, 0), dailyMinutes: minutes });
+    res.json({ year, month, sessions: sessions.length, totalMinutes: dailyMinutes.reduce((a, b) => a + b, 0), dailyMinutes });
   } catch {
     res.status(500).json({ message: 'Unable to load monthly progress.' });
   }
