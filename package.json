@@ -1,1 +1,1 @@
-{"name":"yogagenie","private":true,"scripts":{"install:all":"npm --prefix backend install && npm --prefix frontend install","dev:backend":"npm --prefix backend run dev","dev:frontend":"npm --prefix frontend run dev","dev:ai":"uvicorn ai-service.app.main:app --reload --port 8001"}}
+{"name":"yogagenie","private":true,"scripts":{"install:all":"npm --prefix backend install && npm --prefix frontend install","dev:backend":"npm --prefix backend run dev","dev:frontend":"npm --prefix frontend run dev","dev:ai":"cd ai-service && uvicorn app.main:app --reload --port 8001"}}
