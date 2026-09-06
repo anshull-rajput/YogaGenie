@@ -39,8 +39,10 @@ export default function Dashboard() {
       .then(([planRes, progressRes, yogaRes]) => {
         setPlan(planRes.data.plan);
         setProgress(progressRes.data.progress);
-        const completedPoseIds = new Set((progressRes.data.sessions || []).flatMap(s => (s.poses || []).map(p => p._id || p)));
-        const poses = (yogaRes.data.poses || []).filter(p => !completedPoseIds.has(p._id)).slice(0, 3);
+        const completedPoseIds = new Set(
+          (progressRes.data.sessions || []).flatMap(s => (s.poses || []).map(p => String(p?._id || p)))
+        );
+        const poses = (yogaRes.data.poses || []).filter(p => !completedPoseIds.has(String(p._id))).slice(0, 3);
         setRecommendations(poses.length ? poses : (yogaRes.data.poses || []).slice(0, 3));
       })
       .catch(() => setError('We could not load your dashboard right now. Please refresh and try again.'));
