@@ -1,0 +1,21 @@
+services:
+  mongo:
+    image: mongo:8
+    restart: unless-stopped
+    ports: ["27017:27017"]
+    volumes: [yogagenie-data:/data/db]
+  backend:
+    build: ./backend
+    environment:
+      MONGODB_URI: mongodb://mongo:27017/yogagenie
+      PORT: 5000
+      JWT_SECRET: change-me
+      AI_SERVICE_URL: http://ai-service:8001
+      FRONTEND_URL: http://localhost:5173
+    depends_on: [mongo, ai-service]
+    ports: ["5000:5000"]
+  ai-service:
+    build: ./ai-service
+    ports: ["8001:8001"]
+volumes:
+  yogagenie-data:
