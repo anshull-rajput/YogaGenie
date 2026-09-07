@@ -15,8 +15,23 @@ import progress from './routes/progress.js';
 import ai from './routes/ai.js';
 
 const app = express();
+
+const allowedOrigins = [
+  'http://localhost:5173',
+  'http://localhost:4173',
+  'https://yogagenie-frontend.onrender.com',
+  ...(process.env.FRONTEND_URL || '').split(',').map(origin => origin.trim()).filter(Boolean),
+];
+
 app.use(helmet());
-app.use(cors({ origin: process.env.FRONTEND_URL?.split(',') || 'http://localhost:5173' }));
+app.use(cors({
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) return callback(null, true);
+    return callback(new Error(`CORS blocked origin: ${origin}`));
+  },
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+}));
 app.use(express.json({ limit: '1mb' }));
 app.use(morgan('dev'));
 app.use('/api', rateLimit({ windowMs: 15 * 60 * 1000, max: 300, standardHeaders: true, legacyHeaders: false }));
