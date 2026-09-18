@@ -1,35 +1,148 @@
-# YogaGenie
+# 🧘 YogaGenie
 
-**Your personal AI yoga companion.**
+**Your personal AI-powered yoga and wellness companion.**
 
-YogaGenie is a production-oriented MERN + Python FastAPI wellness platform centered on personalization, structured yoga plans, progress tracking, and the Yoga Jenny AI coach.
+YogaGenie is a full-stack wellness platform that combines a **MERN application**, a **Python FastAPI AI service**, personalized yoga planning, progress tracking, and an AI yoga coach called **Yoga Jenny**.
 
-## Architecture
+The project is designed to help users discover yoga practices, build personalized routines, track their progress, and interact with an AI assistant grounded in a structured yoga knowledge base.
 
-React frontend → Node/Express API → MongoDB
+## ✨ Features
 
-React frontend → Node/Express API → Python FastAPI AI service → modular LLM + yoga knowledge base/RAG
+- 🧘 **Personalized Yoga Plans** based on user goals and preferences
+- 🤖 **Yoga Jenny AI Coach** for conversational yoga and wellness guidance
+- 📚 **Yoga Knowledge Base & RAG Layer** for grounded AI responses
+- 👤 **User Authentication** with JWT and password hashing
+- 📊 **Progress Tracking** for yoga sessions and streaks
+- 🎯 **Goals & Weekly Plans** to support consistent practice
+- 🧩 **Modular AI Service** using FastAPI and an LLM provider abstraction
+- 🔐 **Security-focused Backend** with Helmet, rate limiting and environment-based secrets
+- 🐳 **Docker-ready AI Service**
+- ⚙️ **GitHub Actions CI** for frontend, backend and AI-service checks
 
-## Monorepo
+## 🏗️ Architecture
 
 ```text
-frontend/      React + Vite + Router + Axios + Context API
-backend/       Express + Mongoose + JWT + bcrypt
-ai-service/    FastAPI + provider abstraction + RAG-ready knowledge layer
+                         ┌─────────────────────┐
+                         │    React Frontend   │
+                         │   Vite + Axios       │
+                         └──────────┬──────────┘
+                                    │
+                                    ▼
+                         ┌─────────────────────┐
+                         │ Node.js + Express   │
+                         │ REST API + JWT      │
+                         └───────┬───────┬─────┘
+                                 │       │
+                       ┌─────────▼───┐   │
+                       │  MongoDB    │   │
+                       │  Mongoose   │   │
+                       └─────────────┘   │
+                                         ▼
+                              ┌─────────────────────┐
+                              │ Python FastAPI      │
+                              │     AI Service      │
+                              └──────────┬──────────┘
+                                         │
+                              ┌──────────▼──────────┐
+                              │ Yoga Jenny AI       │
+                              │ LLM + RAG Knowledge │
+                              └─────────────────────┘
 ```
 
-## Implementation phases
+## 📸 Application Preview
 
-1. Foundation: monorepo, environment configuration, shared API conventions.
-2. Experience: landing, authentication, onboarding, dashboard and navigation.
-3. Yoga domain: poses, routines, personalized weekly plans, sessions, progress and streaks.
-4. AI: FastAPI Yoga Jenny service, provider abstraction, grounded yoga knowledge retrieval and conversation context.
-5. Integration: Node proxy to AI service, persistence, error handling and safety guardrails.
-6. Polish: responsive UI, loading/empty/error states, accessibility, security and deployment guidance.
+> Screenshots will be added to the `Image/` folder.  
+> Use the filenames below so the README renders them automatically.
 
-## Local setup
+### 🏠 Landing Page
 
-### Backend
+![YogaGenie landing page](./Image/landing-page.png)
+
+### 📊 User Dashboard
+
+![YogaGenie user dashboard](./Image/dashboard.png)
+
+### 🧘 Personalized Yoga Plan
+
+![YogaGenie personalized yoga plan](./Image/yoga-plan.png)
+
+### 🤖 Yoga Jenny AI Coach
+
+![YogaGenie AI yoga coach](./Image/yoga-jenny-chat.png)
+
+### 📈 Progress Tracking
+
+![YogaGenie progress tracking](./Image/progress.png)
+
+## 🧩 Project Structure
+
+```text
+YogaGenie/
+│
+├── frontend/                 # React + Vite frontend
+│   ├── components/
+│   ├── pages/
+│   ├── context/
+│   └── ...
+│
+├── backend/                  # Node.js + Express API
+│   ├── config/
+│   ├── middleware/
+│   ├── models/
+│   ├── routes/
+│   └── ...
+│
+├── ai-service/               # Python FastAPI AI service
+│   └── app/
+│       ├── agents/
+│       ├── config/
+│       ├── knowledge/
+│       ├── models/
+│       └── services/
+│
+├── .github/workflows/        # CI pipeline
+├── .gitignore
+└── README.md
+```
+
+## 🤖 AI & RAG
+
+The AI layer is separated from the main Node.js backend into a dedicated **FastAPI service**.
+
+The AI service includes:
+
+- LLM provider abstraction
+- Yoga knowledge data
+- Retrieval-oriented service layer
+- Conversation context
+- Structured request/response schemas
+- Safety guidance for wellness-related responses
+
+This separation keeps the AI functionality modular and makes it easier to change or extend the underlying LLM provider.
+
+## 🛠️ Tech Stack
+
+| Layer | Technologies |
+|---|---|
+| Frontend | React, Vite, React Router, Axios, Context API |
+| Backend | Node.js, Express.js, Mongoose |
+| Database | MongoDB |
+| Authentication | JWT, bcrypt |
+| AI Service | Python, FastAPI, Pydantic |
+| AI | LLM provider abstraction, RAG knowledge layer |
+| Security | Helmet, express-rate-limit, environment variables |
+| DevOps | Docker, GitHub Actions |
+
+## 🚀 Local Setup
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/anshull-rajput/YogaGenie.git
+cd YogaGenie
+```
+
+### 2. Start the Backend
 
 ```bash
 cd backend
@@ -38,7 +151,11 @@ npm install
 npm run dev
 ```
 
-### Frontend
+Configure your MongoDB connection and other secrets in `.env`.
+
+### 3. Start the Frontend
+
+Open a new terminal:
 
 ```bash
 cd frontend
@@ -47,28 +164,77 @@ npm install
 npm run dev
 ```
 
-### AI service
+### 4. Start the AI Service
+
+Open another terminal:
 
 ```bash
 cd ai-service
 python -m venv .venv
-# Windows: .venv\\Scripts\\activate
-# macOS/Linux: source .venv/bin/activate
+```
+
+Windows:
+
+```bash
+.venv\\Scripts\\activate
+```
+
+macOS/Linux:
+
+```bash
+source .venv/bin/activate
+```
+
+Then:
+
+```bash
 pip install -r requirements.txt
 cp .env.example .env
 uvicorn app.main:app --reload --port 8001
 ```
 
-MongoDB must be reachable from the backend. API keys belong only in environment variables.
+> **Note:** API keys, JWT secrets and database credentials should only be stored in environment variables and must never be committed to GitHub.
 
-## Safety
+## 🔐 Security & Safety
 
-Yoga Jenny provides general wellness guidance, not medical diagnosis or treatment. It should encourage users to stop if they experience pain, dizziness or unusual discomfort and recommend qualified professional advice for medical concerns or higher-risk practices.
+YogaGenie provides **general wellness guidance** and is not intended to diagnose, treat or prevent medical conditions.
 
-## Production checklist
+Users should stop exercising if they experience pain, dizziness or unusual discomfort and seek qualified professional advice for medical concerns or higher-risk practices.
 
-- Set strong `JWT_SECRET` and provider credentials outside source control.
-- Configure a hosted MongoDB instance and HTTPS CORS origins.
-- Use a real LLM provider by setting `LLM_PROVIDER` and its key.
-- Put the FastAPI service behind authenticated/private network access in production.
-- Add rate limiting, centralized logs, monitoring and a managed secret store before public launch.
+Production deployments should additionally use:
+
+- HTTPS
+- Strong JWT secrets
+- Secure secret management
+- Restricted CORS origins
+- Rate limiting
+- Monitoring and centralized logging
+- Private/authenticated access to the AI service
+
+## 🧪 Continuous Integration
+
+GitHub Actions currently checks:
+
+- Frontend production build
+- Backend JavaScript syntax
+- Python AI-service compilation
+
+This helps catch basic build and syntax issues before changes are merged.
+
+## 🔮 Future Improvements
+
+- Deploy the complete application publicly
+- Add richer pose/media content
+- Improve AI personalization using user progress
+- Expand the yoga knowledge base
+- Add automated tests for frontend, backend and AI service
+- Add production monitoring and observability
+- Improve accessibility and mobile experience
+
+## 📌 Project Status
+
+YogaGenie is an actively developed portfolio project focused on **full-stack development, AI integration, RAG concepts, authentication, data persistence and production-oriented application architecture**.
+
+---
+
+⭐ If you find the project interesting, feel free to explore the code and follow the project.
