@@ -53,23 +53,23 @@ The project is designed to help users discover yoga practices, build personalize
 
 ### 🏠 Landing Page
 
-![YogaGenie landing page](./Image/landing-page.png)
+![YogaGenie landing page](./Image/IMG-20260918-WA0021.jpg)
 
 ### 📊 User Dashboard
 
-![YogaGenie user dashboard](./Image/dashboard.png)
+![YogaGenie user dashboard](./Image/IMG-20260918-WA0022.jpg)
 
 ### 🧘 Personalized Yoga Plan
 
-![YogaGenie personalized yoga plan](./Image/yoga-plan.png)
+![YogaGenie personalized yoga plan](./Image/IMG-20260918-WA0023.jpg)
 
 ### 🤖 Yoga Jenny AI Coach
 
-![YogaGenie AI yoga coach](./Image/yoga-jenny-chat.png)
+![YogaGenie AI yoga coach](./Image/IMG-20260918-WA0024.jpg)
 
 ### 📈 Progress Tracking
 
-![YogaGenie progress tracking](./Image/progress.png)
+![YogaGenie progress tracking](./Image/IMG-20260918-WA0025.jpg)
 
 ## 🧩 Project Structure
 
