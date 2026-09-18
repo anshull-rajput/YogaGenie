@@ -51,9 +51,6 @@ The project is designed to help users discover yoga practices, build personalize
 
 ## 📸 Application Preview
 
-> Screenshots will be added to the `Image/` folder.  
-> Use the filenames below so the README renders them automatically.
-
 ### 🏠 Landing Page
 
 ![YogaGenie landing page](./Image/landing-page.png)
